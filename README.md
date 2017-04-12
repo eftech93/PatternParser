@@ -1,7 +1,7 @@
 # PatternParser
-C'est projet a été devéloppé dans la cadre du course MGL843-01 season 2017, du Prof. Christopher Fuhrman (https://github.com/fuhrmanator).
+C'est projet a été devéloppé dans la cadre du course MGL843-01 season 2017 (École de Technologie Supérieure), du Prof. Christopher Fuhrman (https://github.com/fuhrmanator).
 
-C'est un outil qui parse le patron adaptateur en utilisant la sorti du logiciel Tsantalis, la sorti de JDT2Famix, pharo (comme langage de programmation), MOOSE model et ROASSAL, pour visualiser le patron de conception adaptateur.
+C'est un outil qui parse le patron de conception adaptateur en utilisant la sortie du logiciel Tsantalis, la sortie de JDT2Famix, pharo (comme langage de programmation), MOOSE model et ROASSAL, pour visualiser le patron de conception adaptateur.
 
 Modèle de Visualisation 
 
@@ -15,7 +15,7 @@ Finalement, en utilisant ROASSAL (http://agilevisualization.com/) et Pharo (http
 ![Captura 1](https://github.com/tebo93/PatternParser/blob/master/Capture%201.PNG)
 ![Captura 2](https://github.com/tebo93/PatternParser/blob/master/Captura%202.PNG)
 
-Ici, on peut voir un petite demonstration
+Ici, on peut voir une petite demonstration
 
 ![Demonstration](https://raw.githubusercontent.com/tebo93/PatternParser/master/Demo.mp4)
 
