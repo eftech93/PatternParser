@@ -1,0 +1,184 @@
+|classes view eb list fd xmlFile stream xmlText doc patterns adaptateurs instances name pAdaptateurs pAdaptees ledges  ei vce menu sbc subclassArrow adapterMethod lreferences chercheClassMethod cleanMethod getParentMethod aux t interfaceImplementationLine adapteeLine parentEdges classExtentionLine auxVisualElements getParentEdges|
+classes := (MooseModel root allModels second allClasses select:
+[:each | 
+((each container mooseName beginsWith:'net::sourceforge' ) and: (each name beginsWith: '$' ) not )
+]
+)asSet.
+"Pour le arrow"
+pAdaptateurs := OrderedCollection new.
+pAdaptees := OrderedCollection new.
+ledges := OrderedCollection new.
+parentEdges := OrderedCollection new.
+lreferences := OrderedCollection new.
+auxVisualElements := OrderedCollection new.
+interfaceImplementationLine := [:c | |line|
+	line := (RTDecoratedLine new color: c; line: RTStyledMultiLine new dashedLine; 	emptyArrowHead; attachPoint: (RTShorterDistanceAttachPointAndCompositeShape new )		).
+].
+classExtentionLine :=[ :c | |line|
+	line := (RTDecoratedLine new color: c; line: RTStyledMultiLine new 	emptyArrowHead; attachPoint: (RTShorterDistanceAttachPointAndCompositeShape new )).
+].
+adapteeLine := [:c | |line|
+	line := (RTDecoratedLine new color: c; arrowHead; attachPoint: (RTShorterDistanceAttachPointAndCompositeShape new )).
+].
+list := #('xml' '*.xml' '.xml' 'XML' '*.XML' '.XML').
+fd :=FileDialogWindow basicNew  previewType: nil; initialize ; title: 'Search Fichier';  validExtensions: list;  answerPathName.
+(World openModal: fd) answer.
+xmlFile := fd answer asFileReference.
+stream := xmlFile readStream.
+xmlText := stream upToEnd.
+stream close.
+doc := XMLDOMParser on: xmlText.
+patterns := (XPath for: 'system/pattern') in: doc parseDocument.
+view := RTView new.	
+vce := (RTCompositeShape new add: (RTBox new color: (Color gray alpha:0.6));
+add: (RTLabel new text:#name; color: Color white);
+allOfSameSizeWithPadding;
+	elementsOn: classes
+).
+"cherche class methode"
+chercheClassMethod:=[:className | |returned|
+	vce do:[:cls |
+		cls model name = className
+		ifTrue:[
+			returned := cls.
+		].
+	].
+	returned 
+].
+"Clean Method"
+cleanMethod:=[:x |
+	view removeEdges: ledges.
+	view removeEdges: parentEdges.
+	auxVisualElements do:[:ave |
+		vce add: ave.
+	].
+	auxVisualElements removeAll.
+	ledges removeAll.
+	parentEdges removeAll.
+	vce do:[:cls|
+		(cls shape) allShapes first color: (Color gray alpha: x).
+		(cls shape) allShapes second text: (cls model name).
+		cls update.
+	].
+	RTOptimizedForceBasedLayout new charge: -500; on: vce.
+	getParentEdges value:0.
+	view addAll: parentEdges.
+	view pushBackEdges.
+].
+"getParent Method"
+getParentMethod:=[:x | |returned|
+	vce do:[:cls|
+		(x model isADirectSubclassOf: cls model)
+		ifTrue:[
+			returned:= cls.
+		].
+	].
+  returned
+].
+getParentEdges := [:x |
+	vce do:[:cls | |parent|
+		parent := getParentMethod value: cls.
+		parent = nil ifFalse:[
+			parentEdges add: ((classExtentionLine value: Color gray)						edgeFrom: cls to: parent).		
+			].
+	].
+].
+getParentEdges value:0.
+adaptateurs := patterns at:4.
+adaptateurs nodes do:[:adaptateur | (adaptateur class asString = 'XMLString') ifTrue:[adaptateurs nodes remove:adaptateur]].
+	instances:= adaptateurs nodes collect:[:instance | instance descendantNodes].
+instances := instances collect:[:instance | instance elements].
+instances do:[:pattern | 
+	aux := #('' '' '').
+	pattern do: [:comp |
+		((comp attributes at: #name) = 'Adapter' or: (comp attributes at: #name) = 'Adaptee'  )
+		ifTrue:[
+			l := (comp attributes at: #element) splitOn:'.' .
+			name:= (l at: (l size) ).	
+			((comp attributes at: #name) = 'Adapter' )
+			ifTrue:[
+				pAdaptateurs add: name. 
+				aux at:1 put:(chercheClassMethod value: name).
+				aux at:3 put: (getParentMethod value:(aux at:1) ).
+			]
+			ifFalse:[
+ 				pAdaptees add: name.
+				aux at:2 put:(chercheClassMethod value: name).
+			].
+		].
+	].
+	lreferences add: (aux clone).
+].
+"cette method ajoute l'intance du patron dans la view"
+adapterMethod:=[ :idx | |pat adapter target adaptee|
+	cleanMethod value: 0.4.
+	idx do:[:id |
+		pat := (lreferences at: id).
+		adapter := pat at:1.
+		adaptee := pat at:2.
+		target := pat at:3.
+		(vce includes: adapter)
+		ifTrue:[
+			vce remove: adapter.
+		].
+		auxVisualElements add: adapter.
+		(vce includes: adapter)
+		ifTrue:[
+			vce remove: target.
+		].
+  		auxVisualElements add: target.
+		(vce includes: adapter)
+		ifTrue:[
+			vce remove: adaptee.
+		].
+		auxVisualElements add: adaptee.
+		RTOptimizedForceBasedLayout new charge: -500; on: auxVisualElements.
+		ledges add: ((interfaceImplementationLine value: Color blue)
+							edgeFrom: adapter to: target).
+		ledges add:((adapteeLine value: Color black)
+							edgeFrom: adapter to: adaptee).
+		adapter shape allShapes first color: Color red.
+		(adapter shape) allShapes second text: ( adapter model name, ': Adaptateur' ).
+		adapter update.
+		(target shape) allShapes first color: Color blue.
+		(target shape) allShapes second text: ( target model name, ': Target' ).
+		target update.
+		(adaptee shape) allShapes first color: Color black.
+		(adaptee shape) allShapes second text: ( adaptee model name, ': Adaptee' ).
+		adaptee update.
+		].
+	view addAll: ledges.
+	ledges do: [ :each | each update ].
+	
+].
+"on crée le object Menu"
+menu := RTMenuBuilder new view: view.
+"cette collection est pour stocker les numbre des instances du patron adaptateurs"
+t := OrderedCollection new.
+instances doWithIndex:[:k :i | |p|
+	p := 'Instance: ', i  asString.
+	t add: i.
+	menu menu: 'Adaptateur' submenu: p callback:[
+		adapterMethod value:{i}.
+	].
+].
+"on ajoute le dernier submenu"
+menu menu: 'Adaptateur' submenu: 'Toutes les intances' callback:[
+	adapterMethod value: t.
+].
+"L'option du menu pour rédemarrer le graphe"
+menu menu: 'Restart' callback:[
+	cleanMethod value: 0.6.
+].
+"on ajoute tous les composant visuels"
+view addAll: vce.
+auxVisualElements := RTGroup new.
+view addAll: auxVisualElements.
+RTOptimizedForceBasedLayout new charge: -500; on: vce.
+view addAll: parentEdges.
+vce @RTDraggable.
+auxVisualElements @RTDraggable.
+view @ RTDraggableView.
+view pushBackEdges.
+view explore.
+nil
