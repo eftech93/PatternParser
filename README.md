@@ -20,7 +20,7 @@ Finalement, en utilisant ROASSAL (http://agilevisualization.com/) et Pharo (http
 
 Ici, on peut voir une petite demonstration
 
-![Demonstration](https://raw.githubusercontent.com/tebo93/PatternParser/master/Demo.mp4)
+![Demonstration](https://youtu.be/FaypkVeFVpQ)
 
 Afin d'utiliser le code pharo à disposition, il faut changer le 'package' du projet, sur la ligne de code #4.
 
@@ -50,7 +50,7 @@ Finally, ROASSAL (http://agilevisualization.com/) and Pharon (http://pharo.org/)
 
 Here, we can see a demo.
 
-![Demo](https://raw.githubusercontent.com/tebo93/PatternParser/master/Demo.mp4)
+![Demo](https://youtu.be/FaypkVeFVpQ)
 
 To use the code, you have to change the package of the project in the line of code #4.
 
