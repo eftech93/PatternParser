@@ -1,0 +1,24 @@
+@startuml
+skinparam style strictuml
+|OS|
+start
+:Code source Java]
+fork
+  :""javac"";
+  :Byte code Java]
+  :[[https://users.encs.concordia.ca/~nikolaos/pattern_detection.html patterns4.jar]];
+  :Pattern instances (XML)]
+fork again
+  :[[https://github.com/girba/jdt2famix jdt2famix]];
+  :FAMIX metamodel (.MSE)]
+  |[[http://www.moosetechnology.org/ Moose]]\n<img:http://www.moosetechnology.org/pictures/moose-icon.png{scale=0.15}>|
+  :Load MSE;
+end fork
+
+
+|[[http://www.pharo.org Pharo]]\n<img:http://files.pharo.org/media/logo/icon-lighthouse-128x128.png{scale=0.5}>|
+:Display instances;
+
+stop
+
+@enduml
