@@ -1,0 +1,44 @@
+@startuml
+skinparam style strictuml
+
+sprite $pharo [60x60/16z] {
+xPV95Y8X34N9HA3A___U3X266hLxtN6Xv-Yj5p8HG_XlrG2R0S1VSOX4pXMp3xyA4ZLomeN_0KTgDk7gmmyq4FF2Ze_bxGjj90zuYljpJ1mVHOsJ1QvHEj4F
+qi3T36GQCLvfW--aGNYn6U6Jz1qCGYpYFC5gDTxJxmiCWYJYC0ASOUXuJTYH5K9nkw2L9kd2be43p0mT5O8Roobd7iAq5fE4WV8T6Ytsh0wpnNlns5oApjwX
+K3sc5hQQ_5bE0h5OGSiJhomhsTDxh7c18t9i9jpZVfHDchDkCrpKmuKkMzXva9LDURVNzc5tsYe0UtweixocV75v_-JF9sVgmbO4xZ9qb-EXP1Put_DdtmKd
+wqvB62wVYirLqsRilk_RbboPBLv-NDMhonDEXbNMw27S8ct7JKcry9SMQGKPYsH1TJfDLKVHs68QhutTbBMn6qqMkVnOWTJXyC1YojksAIrzJ3LB6ZeRmmEi
+MxOmmJe3kBQnMY2_i4PodRPNDZeh3onkiRwfFBFyn4fBSuwJbSQYlB2XtWYbatA-OQshtrbhf4BsoR7uR3FX9SwLbLJ8n3FELXiblpQXd4qFQCi38omiL2T9
+1mlth7sjV9Zp9A6ogDXPV69zYl4eIe4sTI9xSMHvOB4tOp-nFQJvI16QSBulQB_-AQfsLa8VTf5QXYq93ytGIEs5PGtOZyVIJcnfE4OBme4SkhnSuX5ZOy_2
+teBIo24B0TSBrDcpS2kgPh6FoMCwgAQu58_2vQpDNnaDUCw6YBDhdfmjakLYxUYv2YXsDjC9nHAYKLGKAPpBZmVhHnunneXpyI2RuTVAjKPiR6xZSbpvTQzo
+b5N2tPf4dSrbJgyBGsr-MnKuAWUwtR1um4aMhcmfL3YhMG9wsaFZfFsGjPXxvKGaUbaeDKywIjrBx9GjyxOnukiYEnsll_Vcp4b58drTlUL03oU-a_NOCrr3
+_ztRqmukiGyYjKtl7_wgmD_-IVdT_W00
+}
+
+sprite $moose [60x60/16z] {
+xPRRbiCW24MzWlp_3qzgfn4D9C9ZLyzJIhfNz21W2A9I0Mnqg26K5BOL2z8YB767J1VmBKXUid_ybev0jm9zvPaUbHKKQ4DLH96sX0BQYBpmDdg5aSWB0vbK
+RSdHKXN9BE-A-mdxd65oA3aydhrsVVR_m-XZmMVoQNNniiMzvEuMkULrkJkzRFVLIwDWGO_N9GPYSQ5ST76A0yfrYKgzyXQ1_0Vhe5FMbNYR4pPKd-DYJNOz
+nuMIN8iQDhfuLeP4LeT7KvOs5gV5Zz5yFYaT6zLEZjgsperLTMn14JCHHd5gyUDDKgTZdfgQO5OAI-DZLu3BeLhQwZYvb__4-_ZBnAAaufECeB5bF6wpWG7e
+Ou7jtSecLkT65hdfHZRnKsPZONBTniRfc9dOFDU6XQtB7Sd0hYNTzjcsSGlNsF1Zlu9juhXW-WC0
+}
+
+|OS|
+start
+:Code source Java]
+fork
+  :""javac"";
+  :Byte code Java]
+  :[[https://users.encs.concordia.ca/~nikolaos/pattern_detection.html patterns4.jar]];
+  :Pattern instances (XML)]
+fork again
+  :[[https://github.com/girba/jdt2famix jdt2famix]];
+  :FAMIX metamodel (.MSE)]
+  |[[http://www.moosetechnologies.org Moose]]\n<$moose>|
+  :Load MSE;
+end fork
+
+
+|[[http://www.pharo.org Pharo]]\n<$pharo>|
+:Display\npattern\ninstances;
+
+stop
+
+@enduml
